@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registrar usuario</title>
     
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
  
@@ -56,22 +56,5 @@
         echo "usuario validado, ya puede operar el sistema";
     }
 ?>
-<script>
-// codigo original de https://formsubmit.co/ajax-documentation
-// $.ajax({
-//     method: 'POST',
-//     url: 'https://formsubmit.co/ajax/angeles@tecnica7.edu.ar',
-//     dataType: 'json',
-//     accepts: 'application/json',
-//     data: {
-//         name: "FormSubmit",
-//         message: "I'm from Devro LABS"
-//     },
-//     success: (data) => console.log(data),
-//     error: (err) => console.log(err)
-// });
-</script>
-
-
 </body>
 </html>
