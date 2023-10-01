@@ -10,17 +10,24 @@
 </head>
 <body>
     <?php
-    if(isset($_POST['registrar'])){
+
     require_once('includes/conexion.php');
-    $usuario = $_POST['usuario'];
-    $contrasenia = $_POST['contrasenia'];
-    $email = $_POST['email'];
-    $token_val = time();
-
-    $foto = "silueta.jpg";
-
-    $sql_insert = "INSERT INTO usuarios (foto, nombre, contrasenia, email, token) VALUES ('$foto', '$usuario', '$contrasenia', '$email', '$token_val')";
-    $insert = mysqli_query($conexion, $sql_insert) ? print('<script>alert("usuario registrado")</script>') : print('<script>alert("ERROR usuario NO registrado")</script>');
+    if(isset($_POST['registrar'])){
+        $email = $_POST['email'];
+        //verifico que no haya usuarios repetidos por email
+        $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+        $consulta = mysqli_query($conexion, $sql);
+        if(mysqli_num_rows($consulta) > 0){
+            print('<script>alert("Ya existe un usuario con este correo"); window.location = \'index.php\'</script>'); 
+        }else{
+            $usuario = $_POST['usuario'];
+            $contrasenia = $_POST['contrasenia'];
+            $contrasenia = password_hash($contrasenia, PASSWORD_DEFAULT);
+            $token_val = time();
+            $foto = "silueta.jpg";
+            $sql_insert = "INSERT INTO usuarios (foto, nombre, contrasenia, email, token) VALUES ('$foto', '$usuario', '$contrasenia', '$email', '$token_val')";
+            $insert = mysqli_query($conexion, $sql_insert) ? print('<script>alert("usuario registrado")</script>') : print('<script>alert("ERROR usuario NO registrado")</script>');
+        }
     ?>
 
 <script>
@@ -53,8 +60,25 @@
     }
 
     if(isset($_GET['token'])){
-        echo "usuario validado, ya puede operar el sistema";
+        // echo "usuario validado, ya puede operar el sistema";
+        session_start();
+        $token = $_GET['token'];
+            $sql_c = "SELECT * FROM usuarios WHERE token = '$token'";
+            $consulta = mysqli_query($conexion, $sql_c);
+            if(mysqli_num_rows($consulta)>0){
+                $registro_u = mysqli_fetch_assoc($consulta);
+                $_SESSION['usuario'] = $registro_u['nombre'];
+
+                $sql_u = "UPDATE usuarios SET token = 1 WHERE token = '$token'";
+                $val_token = mysqli_query($conexion, $sql_u)? print('<script>alert("usuario validado, ya puede ingresar al sistema"); window.location = \'inicio.php\' </script>') : print('<script>alert("ERROR al actualizar token"); window.location = \'index.php\'</script>');
+
+            }else{
+                print('<script>alert("ERROR usuario NO validado"); window.location = \'index.php\'</script>');
+            }
+        
     }
+
+
 ?>
 </body>
 </html>
